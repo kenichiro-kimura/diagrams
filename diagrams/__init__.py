@@ -1,3 +1,4 @@
+import re
 import contextvars
 import os
 import uuid
@@ -270,6 +271,46 @@ class Cluster:
     def subgraph(self, dot: Digraph) -> None:
         self.dot.subgraph(dot)
 
+    def get_mid_icon_id(self):
+        i = len(self.dot.body) / 2
+        i = int((i * 2 + 1) // 2) - 1
+        if i < 0:
+            return ""
+        else:
+            return self.dot.body[i]
+
+    def get_icon_id(self):
+        return re.match(r"^\t([^\ ]*)\ ",self.get_mid_icon_id()).group(1).replace('"','')
+
+    def connect(self, other: "Cluster", direction):
+        if len(self.dot.body) == 0 or len(other.dot.body) == 0:
+            return self
+
+        if re.search(r"compound",self._diagram.dot._head) == None:
+            self._diagram.dot._head += "compound=true;"
+
+        graph_attr = {}
+        graph_attr["lhead"] = self.name
+        graph_attr["ltail"] = other.name
+        graph_attr["dir"] = direction
+
+        lhead_id = self.get_icon_id()
+        ltail_id = other.get_icon_id()
+
+        self._diagram.dot.edge(ltail_id,lhead_id,"",graph_attr)
+        return self
+
+    def __rshift__(self, other: "Cluster"):
+        """Implements Self >> Cluster."""
+        return self.connect(other,"forward")
+
+    def __lshift__(self, other: "Cluster"):
+        """Implements Self << Cluster."""
+        return self.connect(other,"back")
+
+    def __sub__(self, other: "Cluster"):
+        """Implements Self - Cluster."""
+        return self.connect(other,"none")
 
 class Node:
     """Node represents a node for a specific backend service."""
