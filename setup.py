@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="diagrams",
-    version="1.0",
+    version="0.16.1",
     author="kkimura",
     author_email="kimura@sokohiki.org",
     description="patched diagrams",
