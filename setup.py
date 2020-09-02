@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
+import os
 from setuptools import setup
+
+def gen_data_files(*dirs):
+    results = []
+
+    for src_dir in dirs:
+        for root,dirs,files in os.walk(src_dir):
+            for f in files:
+                results.append((root, [ root + "/" + f]))
+    return results
 
 packages = \
 ['diagrams',
@@ -23,6 +33,8 @@ packages = \
 package_data = \
 {'': ['*']}
 
+data_files = gen_data_files("resources")
+
 install_requires = \
 ['graphviz>=0.13.2,<0.14.0', 'jinja2>=2.10,<3.0']
 
@@ -40,6 +52,7 @@ setup_kwargs = {
     'maintainer_email': None,
     'url': 'https://diagrams.mingrammer.com',
     'packages': packages,
+    'data_files': data_files,
     'package_data': package_data,
     'install_requires': install_requires,
     'extras_require': extras_require,
