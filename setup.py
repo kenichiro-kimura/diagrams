@@ -9,9 +9,7 @@ setuptools.setup(
     long_description="",
     long_description_content_type="text/plain",
     url="https://github.com/kenichiro-kimura/",
-    packages=['resources'],
-    package_dir={'resources':'resources'},
-    package_data={'resources': ['*.png','*/*.png']},
+    package_data={'': ['resources/*.png','resources/*/*.png']},
     data_files=[('resources', ['resources/*.png','resources/*/*.png'])],
     classifiers=[
         "License :: OSI Approved :: MIT License",
