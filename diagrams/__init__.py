@@ -290,12 +290,12 @@ class Cluster:
             self._diagram.dot._head += "compound=true;"
 
         graph_attr = {}
-        graph_attr["lhead"] = self.name
-        graph_attr["ltail"] = other.name
+        graph_attr["lhead"] = other.name
+        graph_attr["ltail"] = self.name
         graph_attr["dir"] = direction
 
-        lhead_id = self.get_icon_id()
-        ltail_id = other.get_icon_id()
+        lhead_id = other.get_icon_id()
+        ltail_id = self.get_icon_id()
 
         self._diagram.dot.edge(ltail_id,lhead_id,"",graph_attr)
         return self
